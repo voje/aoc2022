@@ -7,6 +7,10 @@ edition = "2021"
 name = "day00_bin"
 src = "src/bin/day00_bin.rs"
 
+[[bin]]
+name = "day01_bin"
+src = "src/bin/day01_bin.rs"
+
 # [[lib]]
 # name = "day00"
 # src = "src/lib/day00/lib.rs"

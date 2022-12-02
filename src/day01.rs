@@ -27,23 +27,21 @@ pub fn aggregate_calories(s: &str) -> Vec<i32> {
 
 #[test]
 fn dwarves() {
-    const DATA: &str ="
-    1000
-    2000
-    3000
+    const DATA: &str ="1000
+2000
+3000
 
-    4000
+4000
 
-    5000
-    6000
+5000
+6000
 
 
-    7000
-    8000
-    9000
+7000
+8000
+9000
 
-    10000
-    ";
+10000";
 
     let dwarves = aggregate_calories(DATA); 
     let (first, second, third) = top_dwarves(dwarves);

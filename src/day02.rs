@@ -93,3 +93,4 @@ fn day02_2() {
     let (_, s1) = tournament(DATA); 
     assert_eq!(s1, 12);
 }
+

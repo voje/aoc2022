@@ -8,4 +8,5 @@ fn main() {
     let res = part1(&contents);
     let res2 = part2(&contents);
     println!("Part1: {}, part2: {}", res, res2);
+    // Part1: 7428, part2: 2650
 }

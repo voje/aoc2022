@@ -28,8 +28,9 @@ cargo run --bin day03_bin
 Pattern matching; I've prefixed each library's test function.
 Only run library tests (code included in `./src/lib.rs`) and 
 match test function names.   
+We can also disable dead code warnings (while developing).   
 ```
 cargo test --lib day04
-cargo test --lib day04_1
+RUSTFLAGS="$RUSTFLAGS -A dead_code" cargo test --lib day04_1
 ```
 

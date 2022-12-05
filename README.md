@@ -29,8 +29,10 @@ Pattern matching; I've prefixed each library's test function.
 Only run library tests (code included in `./src/lib.rs`) and 
 match test function names.   
 We can also disable dead code warnings (while developing).   
+The `--nocapture` flag prints `println!` statements even if the tests succeed.
 ```
 cargo test --lib day04
 RUSTFLAGS="$RUSTFLAGS -A dead_code" cargo test --lib day04_1
+argo test --lib day05_part -- --nocapture
 ```
 

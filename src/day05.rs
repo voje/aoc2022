@@ -36,10 +36,24 @@ impl Yard {
         }
     }
 
+    // XXABC -> XXCBA
     fn apply_move(mut self, m: &Move) -> Self {
         for _ in 0..m.num {
             let c = self.stacks[m.from - 1].pop();
             self.stacks[m.to - 1].push(c.unwrap());
+        }
+        self
+    }
+
+    // XXABC -> XXABC
+    fn apply_sticky_move(mut self, m: &Move) -> Self {
+        let mut acc: Vec<char> = vec![];
+        for _ in 0..m.num {
+            let c = self.stacks[m.from - 1].pop();
+            acc.push(c.unwrap());
+        }
+        for c in acc.iter().rev() {
+            self.stacks[m.to - 1].push(*c);
         }
         self
     }
@@ -106,10 +120,21 @@ fn read_input(input: &str) -> (Yard, Vec<Move>) {
 pub fn part1(input: &str) -> String {
     let (mut yard, moves) = read_input(input);
     for m in moves {
-        println!("{:?}\n{}---", m, yard);
+        // println!("{:?}\n{}---", m, yard);
         yard = yard.apply_move(&m);
     }
-    println!("END:\n{}---", yard);
+    // println!("END:\n{}---", yard);
+    let s: String = yard.get_top_crates();
+    s
+}
+
+pub fn part2(input: &str) -> String {
+    let (mut yard, moves) = read_input(input);
+    for m in moves {
+        // println!("{:?}\n{}---", m, yard);
+        yard = yard.apply_sticky_move(&m);
+    }
+    // println!("END:\n{}---", yard);
     let s: String = yard.get_top_crates();
     s
 }
@@ -148,3 +173,7 @@ fn day05_part1() {
     assert_eq!(part1(DATA1), "CMZ");
 }
 
+#[test]
+fn day05_part2() {
+    assert_eq!(part2(DATA1), "MCD");
+}

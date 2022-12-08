@@ -1,46 +1,131 @@
+use std::fmt;
+
 type NodeID = usize;
 
-enum NodeType {
-    Dir(String, Vec<NodeID>),
-    File(i64),
+pub trait Node {
+    fn get_parent(&self) -> Option<NodeID>;
+    fn set_parent(&mut self, nid: NodeID);
+    fn get_name(&self) -> String;
+    fn set_name(&mut self, name: String);
 }
 
-struct Node {
+#[derive(Debug)]
+struct Dir {
     parent: Option<NodeID>,
-    node_type: NodeType
+    name: String,
+    children: Vec<NodeID>
+}
+
+impl Dir {
+    fn add_child(&mut self, nidx: NodeID) {
+        self.children.push(nidx); 
+    }
+    fn new(name: String) -> Dir {
+        Dir {
+            parent: None,
+            name,
+            children: vec![],
+        }
+    }
+}
+
+impl Node for Dir {
+    fn set_parent(&mut self, nid: NodeID) {
+        self.parent = Some(nid);
+    }
+    fn get_parent(&self) -> Option<NodeID> {
+        self.parent
+    }
+    fn set_name(&mut self, name: String) {
+        self.name = name;
+    }
+    fn get_name(&self) -> String {
+        self.name.to_owned()
+    }
+}
+
+#[derive(Debug)]
+struct File {
+    parent: Option<NodeID>,
+    size: i64,
+    name: String,
+}
+
+impl Node for File {
+    fn set_parent(&mut self, nid: NodeID) {
+        self.parent = Some(nid);
+    }
+    fn get_parent(&self) -> Option<NodeID> {
+        self.parent
+    }
+    fn set_name(&mut self, name: String) {
+        self.name = name;
+    }
+    fn get_name(&self) -> String {
+        self.name.to_owned()
+    }
+}
+
+impl File {
+    fn new(size: i64) -> File {
+        File {
+            parent: None,
+            size,
+            name: "FILENAME".to_string(),
+        }
+    }
 }
 
 struct FileSystem {
     current_node_idx: NodeID,
-    mem_arena: Vec<Node>
+    mem_arena: Vec<Box<dyn Node>>,
+}
+
+impl fmt::Display for FileSystem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "root: {}\ncurrent_node: {}\nmem_arena: {}",
+            self.mem_arena[0].get_name(),
+            self.mem_arena[self.current_node_idx].get_name(),
+            "MEM_ARENA",
+        ) 
+    } 
 }
 
 impl FileSystem {
     fn new() -> FileSystem {
-        // Root node
-        let n = Node {
-            parent: None,
-            node_type: NodeType::Dir("/".to_string(), vec![]),
-        };
-        FileSystem {
-            mem_arena: vec![n],
+        let mut fs = FileSystem {
             current_node_idx: 0,
-        }
-    }
-
-    // The current node is the 'parent' node
-    fn add_node(&mut self, node_type: NodeType) {
-        let node = Node {
-            parent: Some(self.current_node_idx),
-            node_type,
+            mem_arena: vec![],
         };
-        self.mem_arena.push(node);
-        self.current_node_idx = self.mem_arena.len() - 1;
+        // Add root node
+        let root = Dir::new("/".to_string());
+        fs.add_node(root); 
+        fs
     }
 
-    fn walk() {
-        
+    fn add_node(&mut self, n: impl Node + 'static) -> usize {
+        self.mem_arena.push(Box::new(n));
+        self.mem_arena.len() - 1
     }
+
+
+//    fn walk(&self, node_idx: NodeID, depth: usize) {
+//        let padding = " ".to_string().repeat(depth); 
+//        let node = &self.mem_arena[node_idx];
+//        // println!("{}{:?}", padding, node);
+//        match &node.node_type {
+//            NodeType::Dir(name, children) => {
+//                println!("{}Dir: {}", padding, name);
+//                for c_idx in children {
+//                    println!("HA");
+//                    self.walk(*c_idx, depth + 1);
+//                }
+//            }
+//            NodeType::File(size) => {
+//                println!("{}File: {}", padding, size);
+//            }
+//        }
+//    }
 }
 
 fn part1(s: &str) {
@@ -74,10 +159,19 @@ $ ls
 
 #[test]
 fn day07_file_system() {
-    let fs = FileSystem::new();
-    fs.add_node(NodeType::File(22));
+    let mut fs = FileSystem::new();
+    let a = Dir::new("a".to_string());
+    fs.add_node(a);
 
-    fs.walk(0);
+//     fs.add_node(NodeType::File(22));
+//     fs.add_node(NodeType::Dir(Dir{
+//         name: "one".to_string(),
+//         children: vec![],
+//     });
+// 
+//     fs.walk(0, 0);
+
+    println!("{}", fs)
 }
 
 #[test]

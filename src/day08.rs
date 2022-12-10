@@ -143,31 +143,31 @@ impl Grid {
     }
 }
 
-fn print_mask(m: &Vec<Vec<bool>>) {
-    let mut s = String::new();
-    for row in m {
-        for b in row {
-            if *b {
-                s.push_str("1");
-            } else {
-                s.push_str("0");
-            }
-        }
-        s.push_str("\n");
-    }
-    println!("{}", s);
-}
-
-fn print_grid(m: &Vec<Vec<u32>>) {
-    let mut s = String::new();
-    for row in m {
-        for el in row {
-            s.push_str(&format!("{}", el).to_string());
-        }
-        s.push_str("\n");
-    }
-    println!("{}", s);
-}
+// fn print_mask(m: &Vec<Vec<bool>>) {
+//     let mut s = String::new();
+//     for row in m {
+//         for b in row {
+//             if *b {
+//                 s.push_str("1");
+//             } else {
+//                 s.push_str("0");
+//             }
+//         }
+//         s.push_str("\n");
+//     }
+//     println!("{}", s);
+// }
+// 
+// fn print_grid(m: &Vec<Vec<u32>>) {
+//     let mut s = String::new();
+//     for row in m {
+//         for el in row {
+//             s.push_str(&format!("{}", el).to_string());
+//         }
+//         s.push_str("\n");
+//     }
+//     println!("{}", s);
+// }
 
 
 fn p1_clear_view(tree: u32, line: Vec<u32>) -> bool {

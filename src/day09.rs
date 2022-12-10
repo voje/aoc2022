@@ -78,16 +78,22 @@ fn draw_grid(r: &Rope) {
     for y in-5..20 {
         for x in -5..20 {
             let c = Coord {x: x, y: y};
+
+            let mut it_was_tail = false;
             for (i, t) in r.tail.iter().enumerate() {
                 if c == *t {
-                    s.push_str(&format!("{} ", i));
-                    continue;
+                    s.push_str(&format!("{} ", i + 1));
+                    it_was_tail = true;
+                    break;
                 }
             }
-            if c == r.head {
-                s.push_str("H "); 
-            } else {
-                s.push_str(". ");
+
+            if !it_was_tail {
+                if c == r.head {
+                    s.push_str("H "); 
+                } else {
+                    s.push_str(". ");
+                }
             }
         }
         s.push_str("\n");

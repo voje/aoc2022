@@ -13,3 +13,7 @@ Cargo.lock
 # Added by cargo
 
 /target
+
+/inputs/*.txt
+.inputs_enc_pass.txt
+

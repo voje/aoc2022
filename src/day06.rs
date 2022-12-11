@@ -87,6 +87,7 @@ fn day06_part1() {
     assert_eq!(part1("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"), 11);
 }
 
+/*
 #[test]
 fn day06_sliding_window() {
     let data = "abcdef";
@@ -95,3 +96,5 @@ fn day06_sliding_window() {
         println!("{}", sub);
     }
 }
+*/
+

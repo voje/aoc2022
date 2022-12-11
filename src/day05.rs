@@ -151,18 +151,22 @@ move 3 from 1 to 3
 move 2 from 2 to 1
 move 1 from 1 to 2";
 
+/*
 #[test]
 fn day05_yard() {
     let (yard, _) = read_input(DATA1);
     println!("{}", yard);
 }
+*/
 
 #[test]
 fn day05_read_input() {
     let (stacks, moves) = read_input(DATA1);
 
+    /*
     println!("{:?}", stacks);
     println!("{:?}", moves);
+    */
 
     assert_eq!(stacks.stacks.len(), 3);
     assert_eq!(moves.len(), 4);

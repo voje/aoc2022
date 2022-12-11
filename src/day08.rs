@@ -229,11 +229,13 @@ const DATA: &str = "30373
 33549
 35390";
 
+/*
 #[test]
 fn day08_grid() {
     let g = Grid::new(DATA);
     println!("{:?}", g);
 }
+*/
 
 #[test]
 fn day08_part1() {

@@ -1,5 +1,13 @@
 # aoc2022
 
+## Inputs
+Inputs for AOC are intellectual property, we don't want to publish them 
+to GitHub.   
+```bash
+./scripts/inputs_gpg.sh encrypt
+./scripts/inputs_gpg.sh decrypt
+```
+
 ## Project structure
 One Crate.   
 Each day is a separate binary/library pair:

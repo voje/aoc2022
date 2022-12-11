@@ -1,5 +1,5 @@
 use std::ops::{Sub,Add};
-use std::{time,thread};
+// use std::{time,thread};
 use std::collections::HashSet;
 
 #[derive(Debug)]
@@ -75,7 +75,7 @@ struct Rope {
 
 fn draw_grid(r: &Rope) {
     let mut s = String::new();
-    for y in-5..20 {
+    for y in-5..3 {
         for x in -5..20 {
             let c = Coord {x: x, y: y};
 
@@ -99,9 +99,6 @@ fn draw_grid(r: &Rope) {
         s.push_str("\n");
     }
     println!("{}", s);
-    // Clear ternimal
-    print!("{}[2J", 27 as char);
-    thread::sleep(time::Duration::from_secs(1));
 }
 
 impl Rope {
@@ -121,14 +118,29 @@ impl Rope {
             Direction::Right(c) => *c,
         };
         self.head = self.head + step;
-        draw_grid(&self);
     }
 
-    fn move_head(&mut self, d: Direction, distance: i32) {
+    fn move_head(&mut self, d: Direction, distance: i32, displ_grid: bool) {
+        if displ_grid {
+            println!("move_head {:?}, {}", d, distance);
+            println!("Starting grid:");
+            draw_grid(&self);
+        }
         for step in 0..distance {
             self.move_head_one_step(&d);
+            if displ_grid {
+                println!("Move head step: {}", step);
+                draw_grid(&self);
+            }
             self.follow_tail_one_step();
-            // draw_grid(&self);
+            if displ_grid {
+                println!("Move tail step: {}", step);
+                draw_grid(&self);
+            }
+        }
+        if displ_grid {
+            println!("Ending grid:");
+            draw_grid(&self);
         }
     }
     
@@ -138,13 +150,15 @@ impl Rope {
         // Let's just build a new vector and swap
         let mut new_tail: Vec<Coord> = Vec::new();
 
-        let mut h = &self.head; 
+        let mut h = self.head.clone(); 
+        // println!("Tail before: {:?}", self.tail);
         for i in 0..self.tail.len() {
-            if i > 0 {
-                h = self.tail.get(i-1).unwrap();
+            if new_tail.len() > 0 {
+                h = new_tail.last().unwrap().clone();
             }
             let t = self.tail.get(i).unwrap();
-            let th = *h - *t;
+            // println!("Knot pair: {:?} - {:?}", h, t);
+            let th = h - *t;
             let mut new_knot = t.clone();
             if th.x.abs() >= 2 || th.y.abs() >= 2 {
                 new_knot = *t + th.unit();
@@ -152,6 +166,7 @@ impl Rope {
             new_tail.push(new_knot);
         }
         self.tail = new_tail;
+        // println!("Tail after: {:?}", self.tail);
         self.record_tail_coord()
     }
 
@@ -170,20 +185,18 @@ fn parse_line(line: &str) -> (i32, Direction) {
 }
 
 pub fn part1(data: &str) -> i32 {
-    let mut r = Rope::new(1);
-    for line in data.lines() {
-        let (distance, direction) = parse_line(line);
-        r.move_head(direction, distance); 
-    }
-    r.tail_visited.len().try_into().unwrap()
+    simulate_rope(data, 1, false)
 }
 
 pub fn part2(data: &str) -> i32 {
-    let mut r = Rope::new(9);
-    draw_grid(&r);
+    simulate_rope(data, 9, false)
+}
+
+pub fn simulate_rope(data: &str, rope_len: usize, displ_grid: bool) -> i32 {
+    let mut r = Rope::new(rope_len);
     for line in data.lines() {
         let (distance, direction) = parse_line(line);
-        r.move_head(direction, distance); 
+        r.move_head(direction, distance, displ_grid); 
     }
     r.tail_visited.len().try_into().unwrap()
 }
@@ -198,6 +211,7 @@ D 1
 L 5
 R 2";
 
+#[cfg(test)]
 const DATA2: &str = "R 5
 U 8
 L 8
@@ -225,6 +239,20 @@ fn day09_part1() {
 
 #[test]
 fn day09_part2() {
-    assert_eq!(part2(&DATA), 36);
+    assert_eq!(part2(&DATA2), 36);
+}
+
+#[test]
+fn day09_test_data3() {
+    // The tail doesn't move in this case, the rope just stretches.
+    const DATA3: &str = "R 9";
+    assert_eq!(part2(&DATA3), 1);
+}
+
+#[test]
+fn day09_test_data4() {
+    // The tail doesn't move in this case, the rope just stretches.
+    const DATA3: &str = "R 4\nU 5";
+    assert_eq!(simulate_rope(&DATA3, 3, true), 1);
 }
 

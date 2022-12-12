@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum Instr {
     Noop(u32),
     Addx(u32, i32),

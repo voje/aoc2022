@@ -17,6 +17,10 @@ pub struct Cpu {
 
     // Signal strength sum, part1
     ss_sum: i32,
+
+    crt_on: bool,
+    crt: Vec<char>,
+    crt_idx: usize,
 }
 
 impl Cpu {
@@ -27,14 +31,47 @@ impl Cpu {
             ins_pointer: 0,
             ins_cycle_counter: None,
             ss_sum: 0,
+
+            crt_on: false,
+            // 6 * 40
+            crt: vec!['.'; 240],
+            // middle of a sprite of len 3
+            crt_idx: 0,
         }
+    }
+
+    fn tick(&mut self) {
+        self.draw_pixel();
+        self.clock += 1;
+        // [1, (6 * 40 - 2)]
+        self.crt_idx = (self.crt_idx + 1) % (6 * 40);
+        self.update_ss_sum();
+    }
+
+    fn draw_pixel(&mut self) {
+        // println!("reg_1: {}, crt_idx: {}", self.reg_1, self.crt_idx);
+        if (self.crt_idx % 40) as i32 >= self.reg_1 - 1 &&
+            (self.crt_idx % 40) as i32 <= self.reg_1 + 1 {
+                self.crt[self.crt_idx] = '#';
+            }
+    }
+
+    fn draw_crt(&self) -> String {
+        let mut out = String::new();
+        for (i ,c) in self.crt.iter().enumerate() {
+            if (i % 40) == 0 {
+                out.push_str("\n");
+            }
+            out.push_str(&format!("{}", c));
+        }
+        out.push_str("\n");
+        out
     }
 
     fn run(&mut self, instr: &Vec<Instr>) {
         // println!("Init state: {:?}\n---", self);
         while self.ins_pointer < instr.len() {
-            self.clock += 1;
-            self.update_ss_sum();
+            self.tick();
 
             let ins = instr.get(self.ins_pointer).unwrap(); 
 
@@ -44,6 +81,14 @@ impl Cpu {
             println!("[{}] [{}] || {:?}", self.clock, self.ins_pointer, ins);
             println!("{:?}", self);
             println!("---");
+            */
+            if self.crt_on {
+                println!("{}", self.draw_crt());
+            }
+            /*
+            if self.clock >= 10 {
+                break;
+            }
             */
         }
     }
@@ -96,8 +141,7 @@ impl Visitor<()> for Cpu {
 }
 
 
-fn read_instructions(data: &str) -> i32 {
-    let mut cpu = Cpu::new();
+fn read_instructions(cpu: &mut Cpu, data: &str) -> i32 {
     let mut instr: Vec<Instr> = Vec::new();
     for line in data.lines() {
         let spl: Vec<&str> = line.split(" ").collect();
@@ -113,7 +157,17 @@ fn read_instructions(data: &str) -> i32 {
 }
 
 pub fn part1(data: &str) -> i32 {
-    read_instructions(data)
+    let mut cpu = Cpu::new();
+    read_instructions(&mut cpu, data)
+}
+
+pub fn part2(data: &str) -> String {
+    let mut cpu = Cpu::new();
+
+    // Draw each tick
+    cpu.crt_on = false;
+    read_instructions(&mut cpu, data);
+    cpu.draw_crt()
 }
 
 #[test]
@@ -121,3 +175,17 @@ fn day10_part1() {
     assert_eq!(part1(test_data::DATA1), 13140);
 }
 
+#[test]
+fn day10_part2() {
+    const res: &str = "
+##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######.....
+";
+
+    assert_eq!(part2(test_data::DATA1), res);
+
+}

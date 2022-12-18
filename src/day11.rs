@@ -1,47 +1,36 @@
-use regex::Regex;
+pub mod simulation;
+pub mod monkey;
 
-#[derive(Debug)]
-struct Monke {
-    items: Vec<u32>,
+use simulation::Simulation;
+
+pub fn part1(data: &str) -> u128 {
+    let relief = true;
+    let mut sim = Simulation::new(relief); 
+    sim.parse_input(data);
+
+    let n_rounds = 20;
+    sim.run(n_rounds);
+    sim.part1_result()
 }
 
-impl Monke {
-    fn new() -> Monke {
-        Monke { items: vec![] }
-    }
-}
+pub fn part2(data: &str) -> u128 {
+    let relief = false;
+    let mut sim = Simulation::new(relief); 
+    sim.parse_input(data);
 
-struct Me {
-    worry: u32,
-}
-
-impl Me {
-    fn new() -> Me {
-        Me { worry: 0 }
-    }
-}
-
-fn parse_input(data: &str) {
-    for monkey_line in data.split("\n\n") {
-        println!("---{}---", monkey_line); 
-        let mut monkee = Monke::new();
-
-        let r_items = Regex::new(r"Starting items: (.*)").unwrap();
-        let c_items = r_items.captures(monkey_line).unwrap();
-        let items: Vec<u32> = c_items[1].split(", ")
-            .map(|m| m.parse::<u32>().unwrap()).collect();
-        println!("{:?}", items);
-        monkee.items = items;
-
-        let r_oper = Regex::new(r"Operation: new = (\w+) (.) (\w+)").unwrap();
-        let c_oper = r_oper.captures(monkey_line).unwrap();
-        println!("{:?}", c_oper);
-    }
+    let n_rounds = 1000;
+    sim.run(n_rounds);
+    sim.part1_result()
 }
 
 #[test]
 fn day11_part1() {
-    parse_input(DATA); 
+    assert_eq!(part1(DATA), 10605);
+}
+
+#[test]
+fn day11_part2() {
+    assert_eq!(part2(DATA), 2713310158);
 }
 
 #[cfg(test)]
@@ -60,15 +49,16 @@ Monkey 1:
     If false: throw to monkey 0
 
 Monkey 2:
-  Starting items: 79, 60, 97
-  Operation: new = old * old
-  Test: divisible by 13
-    If true: throw to monkey 1
-    If false: throw to monkey 3
+  Starting items: 79, 60, 97\r
+  Operation: new = old * old\r
+  Test: divisible by 13\r
+    If true: throw to monkey 1\r
+    If false: throw to monkey 3\r
 
 Monkey 3:
   Starting items: 74
   Operation: new = old + 3
   Test: divisible by 17
     If true: throw to monkey 0
-    If false: throw to monkey 1";
+    If false: throw to monkey 1
+";

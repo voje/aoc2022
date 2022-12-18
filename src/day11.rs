@@ -10,7 +10,7 @@ pub fn part1(data: &str) -> u128 {
 
     let n_rounds = 20;
     sim.run(n_rounds);
-    sim.part1_result()
+    sim.top2_result()
 }
 
 pub fn part2(data: &str) -> u128 {
@@ -18,14 +18,25 @@ pub fn part2(data: &str) -> u128 {
     let mut sim = Simulation::new(relief); 
     sim.parse_input(data);
 
-    let n_rounds = 1000;
+    let n_rounds = 21;
     sim.run(n_rounds);
-    sim.part1_result()
+    sim.top2_result()
 }
 
 #[test]
 fn day11_part1() {
     assert_eq!(part1(DATA), 10605);
+}
+
+#[test]
+fn day11_keeping_worries_low() {
+    let relief = false;
+    let mut sim = Simulation::new(relief); 
+    sim.parse_input(DATA);
+
+    let n_rounds = 20;
+    sim.run(n_rounds);
+    assert_eq!(sim.get_insp_counts(), vec![99,97,8,103]);
 }
 
 #[test]

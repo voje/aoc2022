@@ -10,4 +10,6 @@ fn main() {
     // let res2 = part2(&data);
     println!("Level of monkey business after 20 rounds: {}", res1);
     // Level of monkey business after 20 rounds: 99840
+    //
+    // TODO For part2, lookup modulo arithmetic (math!)
 }

@@ -33,11 +33,16 @@ impl Simulation {
         }
     }
 
-    pub fn part1_result(&self) -> u128 {
+    pub fn get_insp_counts(&self) -> Vec<u128> {
         let mut insp: Vec<u128> = vec![];
         for m in &self.monkeys {
             insp.push(m.n_inspections);
         }
+        insp
+    }
+
+    pub fn top2_result(&self) -> u128 {
+        let mut insp = self.get_insp_counts();
         insp.sort();
         // Highest 2 n_inspections
         return insp.pop().unwrap() * insp.pop().unwrap();
@@ -66,6 +71,8 @@ impl Simulation {
             }
 
             // println!("End of round {}:\n{}", _r + 1, self);
+            println!("{}: {:?}", _r, self.get_insp_counts());
+
         }
         // self.print_monkeys();
     }

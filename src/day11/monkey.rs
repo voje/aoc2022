@@ -51,12 +51,9 @@ impl Monkey {
     }
 
     fn decide_on_throw(&self, item: u128) -> usize {
-        // println!("Is {} divisible by {}?", item, self.test_div);
         if (item % self.test_div) == 0 {
-            // println!("Yes --> {}", self.test_true);
             return self.test_true;
         }
-        // println!("No --> {}", self.test_false);
         self.test_false
     }
 
@@ -73,7 +70,7 @@ impl Monkey {
         // Relief that the item isn't broken
         if self.relief {
             new_item = new_item / 3;
-        }
+        } 
         new_item
     }
 
@@ -85,10 +82,7 @@ impl Monkey {
         Ok(match op.as_str() {
             "+" => a + b,
             "-" => a - b,
-            "*" => {
-                println!("{} * {}", a, b);
-                a * b
-            }
+            "*" => a * b,
             "/" => a / b,
             &_ => todo!(),
         })

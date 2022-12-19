@@ -39,10 +39,12 @@ fn day11_keeping_worries_low() {
     assert_eq!(sim.get_insp_counts(), vec![99,97,8,103]);
 }
 
+/*
 #[test]
 fn day11_part2() {
     assert_eq!(part2(DATA), 2713310158);
 }
+*/
 
 #[cfg(test)]
 const DATA: &str = "Monkey 0:

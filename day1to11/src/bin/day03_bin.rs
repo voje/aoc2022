@@ -1,5 +1,5 @@
 use std::fs;
-use aoc2022::day03::{part1, part2};
+use day1to11::day03::{part1, part2};
 
 const FILE_PATH: &str = "./inputs/day03_1.txt";
 

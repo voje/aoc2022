@@ -1,5 +1,5 @@
 use std::fs;
-use aoc2022::day01::{aggregate_calories, top_dwarves};
+use day1to11::day01::{aggregate_calories, top_dwarves};
 
 const FILE_PATH: &str = "./inputs/day01_1.txt";
 // const MAX_DWARF_ANSW: i32 = 69310;

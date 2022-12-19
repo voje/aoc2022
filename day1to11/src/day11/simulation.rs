@@ -27,7 +27,7 @@ impl Simulation {
         }
     }
 
-    fn print_monkeys(&self) {
+    fn _print_monkeys(&self) {
         for m in &self.monkeys {
             println!("{:?}", m);
         }

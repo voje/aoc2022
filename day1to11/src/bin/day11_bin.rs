@@ -1,5 +1,5 @@
 use std::fs;
-use aoc2022::day11::part1;
+use day1to11::day11::part1;
 
 const INPUT :&str = "./inputs/day11_1.txt";
 

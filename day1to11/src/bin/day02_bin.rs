@@ -1,5 +1,5 @@
 use std::fs;
-use aoc2022::day02::tournament;
+use day1to11::day02::tournament;
 
 const FILE_PATH: &str = "./inputs/day02_1.txt";
 
